@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        body,p {
+            margin: 0;
+            padding: 0;
+        }
+        #dvBox {
+            width: 100px;
+            height: 100px;
+            position: absolute;
+            background: rgba(255, 255, 0, 0.5);
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body>
+    <div id="dvBox">
+        
+    </div>
+</body>
+</html>
+<script src="./jquery.js"></script>
+<script>
+    var dv = $("#dvBox");
+    Drag.prototype = {
+        down:function(e){
+            this.x = e.offsetX;
+            this.y = e.offsetY;
+            $(document).mousemove(this.move.bind(this));
+            $(document).mouseup(this.up.bind(this));
+        },
+        move:function(e){
+            this.el.css({
+                 left:e.clientX-this.x+this.el.width()/2,
+                 top:e.clientY-this.y+this.el.height()/2
+            })
+        },
+        up:function(){
+            $(document).unbind("mousemove",this.move);
+        }
+    }
+    function Drag(el){
+        this.el = el;
+        el.mousedown(this.down.bind(this));
+    }
+    new Drag(dv);
+</script>

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        body,p {
+            margin: 0;
+            padding: 0;
+        }
+        #dvBox {
+            width: 300px;
+            height: 300px;
+            position: relative;
+        }
+        #dvBox>div {
+            width: 300px;
+            height: 300px;
+            position: relative;
+            overflow: hidden;
+        }
+        #dv1 {
+            background:url(./img/timg.jpg) no-repeat 100%;
+        }
+        #dvBox>div:nth-of-type(2) {
+            position: absolute;
+            top: 0px;
+            left: 320px;
+            border: 1px salmon solid;
+        }
+        #imgBox {
+            display: flex;
+            margin-top: 20px;
+        }
+        #imgBox p {
+            width: 100px;
+            height: 100px;
+            margin-right: 20px;
+        }
+        img {
+            width: 100%;
+            height: 100%;
+        }
+        #dv2 img {
+            width: 300%;
+            height: 300%;
+            position: absolute;
+        }
+    </style>
+</head>
+<body>
+    <div id="dvBox">
+        <div id="dv1">
+            <img src="./img/timg.jpg" />
+        </div>
+        <div id="dv2">
+            <img src="./img/timg.jpg" />
+        </div>
+    </div>
+    <div id="imgBox">
+        <p><img src="./img/timg.jpg" alt=""></p>
+        <p><img src="./img/timg2.jpg" alt=""></p>
+        <p><img src="./img/timg3.jpg" alt=""></p>
+        <p><img src="./img/timg4.jpg" alt=""></p>
+    </div>
+</body>
+</html>
+<script src="./jquery.js"></script>
+<script>
+    var pImgs = $("#imgBox img");
+    pImgs.mouseover(function (){
+        pImgs.css("border","");
+        $("#dv1 img").attr("src",$(this).attr("src"));
+        $("#dv2 img").attr("src",$(this).attr("src"));
+        $(this).css("border","1px solid red");
+    })
+    class FDJ{
+        constructor(el,n){
+            this.el = el;
+            this.n = n;
+            el.mouseenter(this.enter.bind(this));
+            el.mouseleave(this.out.bind(this));
+            el.mousemove(this.move.bind(this));
+        }
+        createDV(){
+            var dv = $("<div></div>");
+            dv.css({
+                width: this.el.width()/this.n,
+                height: this.el.height()/this.n,
+                background: "rgba(255,255,0,0.5)",
+                left:0,
+                top:0,
+                position: "absolute"
+            })
+            this.dv = dv;
+            $("#dv1").append(dv);
+        }
+        enter(){
+            this.createDV();
+        }
+        out(){
+            this.dv.remove();
+        }
+        move(e){
+            var x = e.clientX-this.dv.width()/2;
+            var y = e.clientY-this.dv.height()/2;
+            if(x<=0){x=0}
+            var maxX = this.el.width()-this.dv.width();
+            if(x>=maxX){x=maxX}
+            if(y<=0){y=0}
+            var maxY = this.el.height()-this.dv.height();
+            if(y>=maxY){y=maxY}
+            this.dv.css({
+                left:x,
+                top:y
+            })
+            $("#dv2>img").css({
+                left:-this.n*x,
+                top:-this.n*y
+            })
+        }
+    }
+    new FDJ($("#dv1"),3);
+</script>
